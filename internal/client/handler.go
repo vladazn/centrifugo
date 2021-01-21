@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"github.com/FZambia/viper-lite"
 	"net/http"
 	"time"
 
@@ -83,7 +84,8 @@ func (h *Handler) Setup() {
 	})
 
 	var rpcProxyHandler proxy.RPCHandlerFunc
-	if h.proxyConfig.RPCEndpoint != "" {
+	natsUrl := viper.GetString("pm_nats_url")
+	if h.proxyConfig.RPCEndpoint != "" || natsUrl != "" {
 		rpcProxyHandler = proxy.NewRPCHandler(proxy.RPCHandlerConfig{
 			Proxy: proxy.NewHTTPRPCProxy(
 				h.proxyConfig.RPCEndpoint,

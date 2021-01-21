@@ -163,6 +163,7 @@ var configDefaults = map[string]interface{}{
 	"proxy_refresh_timeout":                1,
 	"memory_history_meta_ttl":              0,
 	"redis_history_meta_ttl":               0,
+	"pm_nats_url":                          "",
 	"v3_use_offset":                        false, // TODO v3: remove.
 }
 
@@ -218,7 +219,7 @@ func main() {
 			"websocket_ping_interval", "websocket_write_timeout", "websocket_message_size_limit",
 			"proxy_publish_endpoint", "proxy_publish_timeout", "proxy_subscribe_endpoint",
 			"proxy_subscribe_timeout", "proxy_subscribe", "proxy_publish", "redis_sentinel_password",
-			"grpc_api_key", "client_concurrency", "user_personal_single_connection",
+			"grpc_api_key", "client_concurrency", "user_personal_single_connection", "pm_nats_url",
 		}
 
 		for _, env := range bindEnvs {

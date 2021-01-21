@@ -16,6 +16,14 @@ type RPCRequest struct {
 	Transport centrifuge.TransportInfo
 }
 
+type RPCRtoNATSRequest struct {
+	Method    string
+	Data      string
+	ClientID  string
+	UserID    string
+	Transport centrifuge.TransportInfo
+}
+
 // RPCData ...
 type RPCData struct {
 	Data       json.RawMessage `json:"data"`
