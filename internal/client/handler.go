@@ -150,7 +150,6 @@ func (h *Handler) Setup() {
 		if concurrency > 1 {
 			semaphore = make(chan struct{}, concurrency)
 		}
-
 		client.OnRefresh(func(event centrifuge.RefreshEvent, cb centrifuge.RefreshCallback) {
 			h.runConcurrentlyIfNeeded(concurrency, semaphore, func() {
 				cb(h.OnRefresh(client, event, refreshProxyHandler))
@@ -163,6 +162,19 @@ func (h *Handler) Setup() {
 					cb(h.OnRPC(client, event, rpcProxyHandler))
 				})
 			})
+
+			client.OnDisconnect(func(event centrifuge.DisconnectEvent) {
+				if client.UserID() != "" {
+					h.runConcurrentlyIfNeeded(concurrency, semaphore, func() {
+						disconnectEvent := centrifuge.RPCEvent{
+							Method: "user_disconnect",
+							Data:   nil,
+						}
+						h.OnRPC(client, disconnectEvent, rpcProxyHandler)
+					})
+				}
+			})
+
 		}
 
 		client.OnSubscribe(func(event centrifuge.SubscribeEvent, cb centrifuge.SubscribeCallback) {
